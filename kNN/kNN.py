@@ -76,7 +76,6 @@ def img_to_vector(filename):
     img_height = 32
 
     return_vect = zeros((1, img_width * img_height))
-    fr = open(filename)
     for i in range(img_height):
         line_str = fr.readline()
         for j in range(img_width):
