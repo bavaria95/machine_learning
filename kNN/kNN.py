@@ -61,14 +61,14 @@ def dating_class_test():
     norm_mat, ranges, min_vals = normalization(dating_data_mat)
     m = norm_mat.shape[0]
     number_of_tests = int(m * ho_ratio)
-    error_count = 0.0
+    errors_count = 0
 
     for i in range(number_of_tests):
         classifier_result = classify(norm_mat[i, :], norm_mat[number_of_tests:m, :], dating_labels[number_of_tests:m], 5)
-        # print "the classifier came back with: %d, the real answer is: %d" % (classifier_result, dating_labels[i])
+        print "the classifier came back with: %d, the real answer is: %d" % (classifier_result, dating_labels[i])
         if classifier_result != dating_labels[i]:
-            error_count += 1
-    print 'total error rate ', error_count/float(number_of_tests)
+            errors_count += 1
+    print 'total error rate ', errors_count/float(number_of_tests)
 
 
 def img_to_vector(filename):
@@ -83,16 +83,40 @@ def img_to_vector(filename):
             return_vect[0, img_height*i + j] = int(line_str[j])
     return return_vect
 
+def handwriting_class_test():
+    train_labels = []
+    training_files_list = listdir('trainingDigits')           # load the training set
+    training_set_size = len(training_files_list)
+
+    training_matrix = zeros((training_set_size, 1024))
+    for i in range(training_set_size):
+        filename_full = training_files_list[i]
+        filename = filename_full.split('.')[0]                   # take off .txt
+        digit_from_training = int(filename.split('_')[0])
+        train_labels.append(digit_from_training)
+        training_matrix[i, :] = img_to_vector('trainingDigits/' + filename_full)
+
+    test_files_list = listdir('testDigits')                  # iterate through the test set
+    errors_count = 0
+    test_set_size = len(test_files_list)
+    for i in range(test_set_size):
+        filename_full = test_files_list[i]
+        filename = filename_full.split('.')[0]                 # take off .txt
+        correct_digit = int(filename.split('_')[0])
+        image_under_test = img_to_vector('testDigits/' + filename_full)
+        classifier_result = classify(image_under_test, training_matrix, train_labels, 3)
+        print "the classifier came back with: %d, the real answer is: %d" % (classifier_result, correct_digit)
+        if classifier_result != correct_digit:
+            errors_count += 1
+
+    print "\nthe total number of errors is: %d" % errors_count
+    print "\nthe total error rate is: %f" % (errors_count/float(test_set_size))
+
 # groups, labels = create_data_set()
 # print classify([0, 0], groups, labels, 3)
 
 # dating_class_test()
 # plot_data(dating_data_mat[:,1], dating_data_mat[:,2], dating_labels)
-# print dating_data_mat
-# print classify([12, 14, 200], dating_data_mat, dating_labels, 3)
 
-# test_vector = img_to_vector('testDigits/0_13.txt')
-# print test_vector
-
-handwritingClassTest()
+handwriting_class_test()
 
