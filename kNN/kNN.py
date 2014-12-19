@@ -1,8 +1,8 @@
 import operator
-import matplotlib
 import matplotlib.pyplot as plt
 from numpy import *
 import re
+from os import listdir
 
 def file_to_matrix(filename):
     fr = open(filename)
@@ -26,8 +26,6 @@ def create_data_set():
     return groups, labels
 
 def plot_data(x, y, z):
-    import matplotlib
-    import matplotlib.pyplot as plt
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.scatter(x, y, 15*array(z), 15*array(z))
@@ -72,11 +70,29 @@ def dating_class_test():
             error_count += 1
     print 'total error rate ', error_count/float(number_of_tests)
 
+
+def img_to_vector(filename):
+    img_width = 32
+    img_height = 32
+
+    return_vect = zeros((1, img_width * img_height))
+    fr = open(filename)
+    for i in range(img_height):
+        line_str = fr.readline()
+        for j in range(img_width):
+            return_vect[0, img_height*i + j] = int(line_str[j])
+    return return_vect
+
+
+
 # groups, labels = create_data_set()
 # print classify([0, 0], groups, labels, 3)
 
-dating_class_test()
+# dating_class_test()
 # plot_data(dating_data_mat[:,1], dating_data_mat[:,2], dating_labels)
 # print dating_data_mat
 # print classify([12, 14, 200], dating_data_mat, dating_labels, 3)
+
+test_vector = img_to_vector('testDigits/0_13.txt')
+print test_vector
 
