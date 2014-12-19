@@ -20,5 +20,23 @@ def classify(inX, data_set, labels, k):
         class_count[votes_for_label] = class_count.get(votes_for_label, 0) + 1
     return max(class_count.iteritems(), key = operator.itemgetter(1))[0]
 
-groups, labels = create_data_set()
-print classify([0, 0], groups, labels, 3)
+def file_to_matrix(filename):
+    fr = open(filename)
+    number_of_lines = len(fr.readlines())
+    return_matrix = zeros((number_of_lines, 3))
+    class_label_vector = []
+
+    fr = open(filename)
+    index = 0
+    for line in fr.readlines():
+        line = line.strip()
+        list_from_line = line.split('\t')
+        return_matrix[index, :] = list_from_line[0 : 3]
+        class_label_vector.append(list_from_line[-1])
+        index += 1
+    return return_matrix, class_label_vector
+
+# groups, labels = create_data_set()
+# print classify([0, 0], groups, labels, 3)
+
+dating_data_mat, dating_labels = file_to_matrix('datingTestSet.txt')
