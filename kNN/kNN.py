@@ -45,9 +45,9 @@ def euclidean_distance(a, b):
     return sum([(x - y)**2 for x, y in zip(a, b)])**0.5
 
 def classify(inX, data_set, labels, k):
-    distances = []
-    for point in data_set:
-        distances.append(euclidean_distance(inX, point))
+    size = data_set.shape[0]
+    distances = (((tile(inX, (size, 1)) - data_set)**2).sum(axis = 1))**0.5
+
     distances_indexes_sorted = sorted(range(len(distances)), key=lambda p: distances[p])[:k]
     class_count = {}
     for number_of_point in distances_indexes_sorted:
@@ -83,8 +83,6 @@ def img_to_vector(filename):
             return_vect[0, img_height*i + j] = int(line_str[j])
     return return_vect
 
-
-
 # groups, labels = create_data_set()
 # print classify([0, 0], groups, labels, 3)
 
@@ -93,6 +91,8 @@ def img_to_vector(filename):
 # print dating_data_mat
 # print classify([12, 14, 200], dating_data_mat, dating_labels, 3)
 
-test_vector = img_to_vector('testDigits/0_13.txt')
-print test_vector
+# test_vector = img_to_vector('testDigits/0_13.txt')
+# print test_vector
+
+handwritingClassTest()
 
